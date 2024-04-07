@@ -100,13 +100,34 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Initialize a pointer k to track the position of the next unique element.
+                int k = 1;
+
+                // Iterate through the array starting from the second element.
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    // If the current element is different from the previous element,
+                    // update the array in-place by moving the current element to the position indicated by k.
+                    if (nums[i] != nums[i - 1])
+                    {
+                        nums[k++] = nums[i]; // Move the unique element to the correct position.
+                    }
+                }
+
+                // Return the length of the array up to the position of the last unique element (k).
+                return k;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        //Self-reflection 
+        /*
+         I learned how to eliminate duplicates from a sorted array while maintaining the original order from this question. One clever technique to update the array in place was to use a pointer to track unique entries. I can apply this clever method to other array manipulation chores in the future.
+         Here, it's important to pay attention to the array indices. To prevent needless complications in the solution, it's also critical to have a thorough understanding of the issue at hand. It can be simpler to understand the code if variables are named clearly.
+         */
 
         /*
         
@@ -134,14 +155,41 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<int>();
+                // Initialize a variable to keep track of the index where non-zero elements should be moved
+                int nonZeroIndex = 0;
+
+                // Iterate through the array
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    // If the current element is not zero, move it to the position indicated by nonZeroIndex
+                    if (nums[i] != 0)
+                    {
+                        nums[nonZeroIndex++] = nums[i];
+                    }
+                }
+
+                // Fill the remaining elements of the array with zeros
+                for (int i = nonZeroIndex; i < nums.Length; i++)
+                {
+                    nums[i] = 0;
+                }
+
+                // Return a new list containing the modified array
+                return new List<int>(nums);
             }
             catch (Exception)
             {
+                //If an exception occurs, rethrow it
                 throw;
             }
         }
+
+        //Self-reflection
+
+        /*
+         I gained knowledge about how to transfer zeros to an array's end while preserving the non-zero elements' order. This problem's two-pointer method provided an excellent approach to efficiently maintain track of the elements. It's a useful method for tasks involving comparable array rearrangements.
+         It's crucial to confirm that the solution functions for edge circumstances, such as arrays with just zeros or a single element. Verifying the accuracy and efficiency of the solution by testing it with various arrays is also a good idea.
+         */
 
         /*
 
@@ -185,14 +233,68 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<IList<int>>();
+                // Sort the input array to easily identify duplicates and to optimize the search for triplets
+                Array.Sort(nums);
+
+                // Initialize a list to store the triplets that sum up to zero
+                List<IList<int>> result = new List<IList<int>>();
+
+                // Iterate through the array
+                for (int i = 0; i < nums.Length - 2; i++)
+                {
+                    // Skip duplicates to avoid duplicate triplets
+                    if (i == 0 || (i > 0 && nums[i] != nums[i - 1]))
+                    {
+                        // Set the left and right pointers for the current element
+                        int low = i + 1;
+                        int high = nums.Length - 1;
+                        int sum = 0 - nums[i]; // Calculate the target sum for the current element
+
+                        // Two-pointer approach to find the other two elements that sum up to the target sum
+                        while (low < high)
+                        {
+                            if (nums[low] + nums[high] == sum)
+                            {
+                                // Found a triplet, add it to the result list
+                                result.Add(new List<int> { nums[i], nums[low], nums[high] });
+
+                                // Skip duplicates for the left and right pointers
+                                while (low < high && nums[low] == nums[low + 1]) low++;
+                                while (low < high && nums[high] == nums[high - 1]) high--;
+
+                                // Move the pointers
+                                low++;
+                                high--;
+                            }
+                            else if (nums[low] + nums[high] < sum)
+                            {
+                                // If the sum is less than the target, move the left pointer to the right
+                                low++;
+                            }
+                            else
+                            {
+                                // If the sum is greater than the target, move the right pointer to the left
+                                high--;
+                            }
+                        }
+                    }
+                }
+
+                // Return the list of triplets that sum up to zero
+                return result;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        //Self-reflection 
+
+        /*
+         My task in answering this question was to locate distinct triplets in an array whose sum equals zero. The two-pointer method and sorting made it easier to locate these triplets without making duplicates. It helped me comprehend sorting strategies and array manipulation better.
+         The solution to this issue lies in efficiently managing duplicates. Furthermore, knowing the sorting algorithm's time complexity can help make sure the total solution satisfies the condition for linear time complexity.
+         */
 
         /*
 
@@ -221,13 +323,43 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Initialize variables to keep track of the maximum consecutive ones and the current consecutive ones
+                int maxCount = 0;
+                int count = 0;
+
+                // Iterate through the array
+                foreach (var num in nums)
+                {
+                    if (num == 1)
+                    {
+                        // If the current number is 1, increment the count of consecutive ones
+                        count++;
+
+                        // Update the maximum consecutive ones if the current count is greater
+                        maxCount = Math.Max(maxCount, count);
+                    }
+                    else
+                    {
+                        // If the current number is not 1, reset the count of consecutive ones
+                        count = 0;
+                    }
+                }
+
+                // Return the maximum consecutive ones
+                return maxCount;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        //Self-reflection 
+
+        /*
+         The goal was to determine how many consecutive ones could possibly be found in a binary array. I gained knowledge on how to loop through the array, record the ones that come after, and adjust the maximum count as necessary. It was a useful practice in conditional updating and array traversal.
+         Making the solution more resilient can be achieved by taking into account edge circumstances, such as arrays with no ones. Another way to improve the readability and comprehension of the code is to use descriptive variable names.
+         */
 
         /*
 
@@ -257,13 +389,41 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Initialize variables to store the decimal number and the base value
+                int decimalNumber = 0;
+                int baseValue = 1;
+
+                // Convert binary to decimal
+                while (binary > 0)
+                {
+                    // Get the rightmost digit of the binary number
+                    int remainder = binary % 10;
+
+                    // Remove the rightmost digit from the binary number
+                    binary /= 10;
+
+                    // Update the decimal number by adding the remainder multiplied by the base value
+                    decimalNumber += remainder * baseValue;
+
+                    // Update the base value for the next digit
+                    baseValue *= 2;
+                }
+
+                // Return the decimal number
+                return decimalNumber;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        //Self-reflection 
+
+        /*
+         The task at hand involved transforming a binary value into its decimal representation without utilising bitwise operators or the Math.Pow function. For this translation, I had to perform some basic arithmetic operations, which helped me better comprehend binary numbers and number system conversions.
+         It can be easier to comprehend and apply the answer if the conversion process is divided into smaller parts. It is possible to verify the accuracy and effectiveness of the solution by testing it using various binary integers.
+         */
 
         /*
 
@@ -295,13 +455,37 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Sort the input array to find the maximum gap between adjacent numbers
+                Array.Sort(nums);
+
+                // Initialize a variable to store the maximum gap
+                int maxGap = 0;
+
+                // Iterate through the sorted array
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    // Calculate the gap between the current number and the previous number
+                    int gap = nums[i] - nums[i - 1];
+
+                    // Update the maximum gap if the current gap is larger
+                    maxGap = Math.Max(maxGap, gap);
+                }
+
+                // Return the maximum gap
+                return maxGap;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        //Self-reflection 
+
+        /*
+         Finding the largest difference between two consecutive elements in a sorted array was the problem at hand. After sorting the array, I ran iterations over it to determine the biggest difference. My grasp of sorting algorithms and determining the maximum differences between arrays has increased as a result of this problem.
+          Readability can be increased by providing explanations for each algorithmic step in comments. A robust solution must handle edge circumstances, such as arrays with fewer than two members.
+         */
 
         /*
 
@@ -335,6 +519,24 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
+                // Sort the input array to easily identify the largest perimeter
+                Array.Sort(nums);
+
+                // Get the length of the array
+                int n = nums.Length;
+
+                // Iterate from the end of the array to find the largest perimeter
+                for (int i = n - 1; i >= 2; i--)
+                {
+                    // Check if the current triplet forms a valid triangle
+                    if (nums[i - 2] + nums[i - 1] > nums[i])
+                    {
+                        // If it does, return the perimeter of the triangle
+                        return nums[i - 2] + nums[i - 1] + nums[i];
+                    }
+                }
+
+                // If no valid triangle is found, return 0
                 return 0;
             }
             catch (Exception)
@@ -342,6 +544,13 @@ namespace ISM6225_Spring_2024_Assignment_2
                 throw;
             }
         }
+
+        //Self-reflection 
+
+        /*
+         Learning: Using side lengths from an array, determine the biggest perimeter of a triangle with a non-zero area in this question. I discovered how to determine the biggest perimeter by sorting the array and then iterating over it. My comprehension of sorting algorithms and the effective determination of an array's maximum perimeter has improved as a result of this problem.
+         The solution can be strengthened by handling edge circumstances, including arrays with fewer than three elements, and using descriptive variable names. To make sure the answer is accurate and effective, test it using several arrays.
+         */
 
         /*
 
@@ -383,19 +592,36 @@ namespace ISM6225_Spring_2024_Assignment_2
         s​​​​​​ and part consists of lowercase English letters.
 
         */
-
         public static string RemoveOccurrences(string s, string part)
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return "";
+                // Loop until the part no longer exists in the string
+                while (s.Contains(part))
+                {
+                    // Find the index of the first occurrence of the part in the string
+                    int index = s.IndexOf(part);
+
+                    // Remove the part from the string starting at the found index
+                    s = s.Remove(index, part.Length);
+                }
+
+                // Return the modified string
+                return s;
+
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+        //Self-reflection 
+
+        /*
+          To eliminate every instance of a substring from a string was the aim. I eliminated the substring from the string by using a loop to locate and eliminate it. My comprehension of manipulating strings and effectively eliminating substrings from a string has improved as a result of this problem.
+          The approach can be strengthened by handling situations in which the substring is absent from the string and by using descriptive variable names. It is possible to verify the accuracy and effectiveness of the solution by testing it using various strings and substrings.
+         */
 
         /* Inbuilt Functions - Don't Change the below functions */
         static string ConvertIListToNestedList(IList<IList<int>> input)
